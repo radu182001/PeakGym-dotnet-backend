@@ -17,6 +17,8 @@ public class TrainingPlan : BaseEntity
     public User Trainer { get; set; } = default!;
 
     public ICollection<User> Users { get; set; } = default!;
-    //public ICollection<Exercise> Exercises { get; set; } = default!;
+
+    // Merge table for many to many relationship with Exercises
+    public ICollection<TrainingPlanExercise> TrainingPlanExercises { get; set; } = default!;
 
 }

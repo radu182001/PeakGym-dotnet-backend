@@ -1,6 +1,6 @@
 ﻿namespace MobyLabWebProgramming.Core.Entities;
 
-class TrainingPlanExercise
+public class TrainingPlanExercise : BaseEntity
 {
 
     public Guid TrainingPlanId { get; set; }
@@ -8,6 +8,7 @@ class TrainingPlanExercise
 
     public Guid ExerciseId { get; set; }
     public Exercise Exercise { get; set; } = default!;
+    public int Weekday { get; set; } = default;
 
 }
 

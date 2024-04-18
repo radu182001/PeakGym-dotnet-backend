@@ -22,4 +22,5 @@ public class User : BaseEntity
     /// </summary>
 /*    public ICollection<UserFile> UserFiles { get; set; } = default!;*/
     public ICollection<TrainingPlan> TrainingPlans { get; set; } = default!; // For trainers
+    public ICollection<Exercise> Exercises { get; set; } = default!; // For trainers
 }
