@@ -21,4 +21,6 @@ public class TrainingPlan : BaseEntity
     // Merge table for many to many relationship with Exercises
     public ICollection<TrainingPlanExercise> TrainingPlanExercises { get; set; } = default!;
 
+    public ICollection<ProgressLog> ProgressLogs { get; set; } = default!;
+
 }
