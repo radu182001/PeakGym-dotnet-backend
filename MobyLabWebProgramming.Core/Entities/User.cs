@@ -25,4 +25,8 @@ public class User : BaseEntity
     public ICollection<Exercise> Exercises { get; set; } = default!; // For trainers
 
     public ICollection<ProgressLog> ProgressLogs { get; set; } = default!;
+
+    public ICollection<Goal> Goals { get; set; } = default!;
+
+    public ICollection<Comment> Comments { get; set; } = default!;
 }

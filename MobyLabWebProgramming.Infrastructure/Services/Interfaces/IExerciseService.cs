@@ -19,7 +19,7 @@ public interface IExerciseService
 
     public Task<ServiceResponse> AddToTrainingPlan(ExerciseToTrainingPlanDTO data, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
-    //public Task<ServiceResponse> Update(TrainingPlanUpdateDTO plan, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> Update(ExerciseUpdateDTO exercise, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
-    //public Task<ServiceResponse> Delete(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
+    public Task<ServiceResponse> Delete(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 }

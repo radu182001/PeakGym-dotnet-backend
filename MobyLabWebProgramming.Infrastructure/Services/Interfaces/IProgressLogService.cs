@@ -12,4 +12,8 @@ public interface IProgressLogService
     public Task<ServiceResponse<PagedResponse<ProgressLogDTO>>> GetProgressLogs(PaginationQueryParams pagination, int flag, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
     public Task<ServiceResponse> Add(ProgressLogAddDTO log, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
 
+    public Task<ServiceResponse> Update(ProgressLogUpdateDTO log, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
+
+    public Task<ServiceResponse> Delete(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default);
+
 }

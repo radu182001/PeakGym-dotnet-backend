@@ -87,4 +87,26 @@ public class ProgressLogController : AuthorizedController
             this.ErrorMessageResult(currentUser.Error);
     }
 
+    [Authorize]
+    [HttpPut]
+    public async Task<ActionResult<RequestResponse>> Update([FromBody] ProgressLogUpdateDTO log) // The FromBody attribute indicates that the parameter is deserialized from the JSON body.
+    {
+        var currentUser = await GetCurrentUser();
+
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _progressLogService.Update(log, currentUser.Result)) :
+            this.ErrorMessageResult(currentUser.Error);
+    }
+
+    [Authorize]
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult<RequestResponse>> Delete([FromRoute] Guid id) // The FromRoute attribute will bind the id from the route to this parameter.
+    {
+        var currentUser = await GetCurrentUser();
+
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _progressLogService.Delete(id, currentUser.Result)) :
+            this.ErrorMessageResult(currentUser.Error);
+    }
+
 }

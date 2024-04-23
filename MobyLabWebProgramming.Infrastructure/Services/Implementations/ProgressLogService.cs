@@ -13,7 +13,7 @@ using System.Numerics;
 
 namespace MobyLabWebProgramming.Infrastructure.Services.Implementations;
 
-internal class ProgressLogService : IProgressLogService
+public class ProgressLogService : IProgressLogService
 {
 
     private readonly IRepository<WebAppDatabaseContext> _repository;
@@ -54,6 +54,55 @@ internal class ProgressLogService : IProgressLogService
             Date = DateTime.Now,
             Weekday = log.Weekday
         }, cancellationToken); // A new entity is created and persisted in the database.
+
+        return ServiceResponse.ForSuccess();
+    }
+
+    public async Task<ServiceResponse> Update(ProgressLogUpdateDTO log, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
+    {
+        if (requestingUser != null && !(requestingUser.Role == UserRoleEnum.Admin || requestingUser.Role == UserRoleEnum.Client))
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only admin or clients can update exercises!", ErrorCodes.CannotUpdate));
+        }
+
+
+        var entity = await _repository.GetAsync(new ProgressLogSpec(log.Id), cancellationToken);
+
+        if (entity.ClientId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the owner canupdate this log!", ErrorCodes.CannotUpdate));
+        }
+
+        if (entity != null) // Verify if the user is not found, you cannot update an non-existing entity.
+        {
+            entity.TrainingPlanId = log.TrainingPlanId ?? entity.TrainingPlanId;
+            entity.Weekday = log.Weekday ?? entity.Weekday;
+
+            await _repository.UpdateAsync(entity, cancellationToken); // Update the entity and persist the changes.
+        }
+
+        return ServiceResponse.ForSuccess();
+    }
+
+    public async Task<ServiceResponse> Delete(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
+    {
+        if (requestingUser != null && !(requestingUser.Role == UserRoleEnum.Admin || requestingUser.Role == UserRoleEnum.Client))
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the admin or the client can delete this log!", ErrorCodes.CannotDelete));
+        }
+
+        var result = await _repository.GetAsync(new ProgressLogProjectionSpec(id), cancellationToken);
+        if (result == null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Progress log doesn't exist!", ErrorCodes.EntityNotFound));
+        }
+
+        if (result.ClientId != requestingUser.Id)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the owner can delete this log!", ErrorCodes.CannotDelete));
+        }
+
+        await _repository.DeleteAsync<ProgressLog>(id, cancellationToken); // Delete the entity.
 
         return ServiceResponse.ForSuccess();
     }

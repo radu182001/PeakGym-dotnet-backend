@@ -176,7 +176,9 @@ public static class WebApplicationBuilderExtensions
             .AddTransient<IMailService, MailService>()
             .AddTransient<ITrainingPlanService, TrainingPlanService>()
             .AddTransient<IExerciseService, ExerciseService>()
-            .AddTransient<IProgressLogService, ProgressLogService>();
+            .AddTransient<IProgressLogService, ProgressLogService>()
+            .AddTransient<IGoalService, GoalService>()
+            .AddTransient<ICommentService, CommentService>();
 
         return builder;
     }

@@ -23,4 +23,6 @@ public class TrainingPlan : BaseEntity
 
     public ICollection<ProgressLog> ProgressLogs { get; set; } = default!;
 
+    public ICollection<Comment> Comments { get; set; } = default!;
+
 }
