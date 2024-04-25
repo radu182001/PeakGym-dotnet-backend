@@ -47,6 +47,11 @@ public class ProgressLogService : IProgressLogService
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only clients can add progress!", ErrorCodes.CannotAdd));
         }
 
+        if (requestingUser.TrainingPlanId == null)
+        {
+            return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "You are not subscribed to any plan!", ErrorCodes.CannotAdd));
+        }
+
         await _repository.AddAsync(new ProgressLog
         {
             ClientId = requestingUser.Id,
