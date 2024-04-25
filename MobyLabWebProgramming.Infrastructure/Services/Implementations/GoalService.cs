@@ -29,7 +29,7 @@ public class GoalService : IGoalService
 
         return result != null ?
             ServiceResponse<GoalDTO>.ForSuccess(result) :
-            ServiceResponse<GoalDTO>.FromError(CommonErrors.UserNotFound);
+            ServiceResponse<GoalDTO>.FromError(CommonErrors.GoalNotFound);
     }
 
     public async Task<ServiceResponse<PagedResponse<GoalDTO>>> GetGoals(PaginationQueryParams pagination, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)

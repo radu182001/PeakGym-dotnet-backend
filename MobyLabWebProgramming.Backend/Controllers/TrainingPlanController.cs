@@ -33,6 +33,22 @@ public class TrainingPlanController : AuthorizedController
     }
 
     [Authorize]
+    [HttpGet]
+    public async Task<ActionResult<RequestResponse<TrainingPlanDTO>>> GetClientCurrentPlan()
+    {
+        var currentUser = await GetCurrentUser();
+
+/*        if (ExtractClaims().TrainingPlanId == null)
+        {
+            return this.ErrorMessageResult<TrainingPlanDTO>(currentUser.Error);
+        }*/
+
+        return currentUser.Result != null ?
+            this.FromServiceResponse(await _trainingPlanService.GetCurrentTrainingPlan(ExtractClaims().TrainingPlanId, currentUser.Result)) :
+            this.ErrorMessageResult<TrainingPlanDTO>(currentUser.Error);
+    }
+
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<RequestResponse>> Add([FromBody] TrainingPlanAddDTO trainingPlan)
     {
@@ -56,12 +72,12 @@ public class TrainingPlanController : AuthorizedController
 
     [Authorize]
     [HttpPut]
-    public async Task<ActionResult<RequestResponse>> Unsubscribe([FromBody] TrainingPlanSubscribeDTO plan) // The FromBody attribute indicates that the parameter is deserialized from the JSON body.
+    public async Task<ActionResult<RequestResponse>> Unsubscribe() // The FromBody attribute indicates that the parameter is deserialized from the JSON body.
     {
         var currentUser = await GetCurrentUser();
 
         return currentUser.Result != null ?
-            this.FromServiceResponse(await _trainingPlanService.UnsubscribeFromPlan(plan.Id, currentUser.Result)) :
+            this.FromServiceResponse(await _trainingPlanService.UnsubscribeFromPlan(currentUser.Result)) :
             this.ErrorMessageResult(currentUser.Error);
     }
 

@@ -29,7 +29,7 @@ public class CommentService : ICommentService
 
         return result != null ?
             ServiceResponse<CommentDTO>.ForSuccess(result) :
-            ServiceResponse<CommentDTO>.FromError(CommonErrors.UserNotFound);
+            ServiceResponse<CommentDTO>.FromError(CommonErrors.CommentNotFound);
     }
 
     public async Task<ServiceResponse<PagedResponse<CommentDTO>>> GetCommentsForTrainingPlan(PaginationQueryParams pagination, Guid trainingPlanId, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)

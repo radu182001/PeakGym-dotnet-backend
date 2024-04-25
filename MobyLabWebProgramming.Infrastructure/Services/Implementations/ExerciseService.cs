@@ -30,7 +30,7 @@ public class ExerciseService : IExerciseService
 
         return result != null ?
             ServiceResponse<ExerciseDTO>.ForSuccess(result) :
-            ServiceResponse<ExerciseDTO>.FromError(CommonErrors.UserNotFound);
+            ServiceResponse<ExerciseDTO>.FromError(CommonErrors.ExerciseNotFound);
     }
 
     public async Task<ServiceResponse<PagedResponse<ExerciseDTO>>> GetExercises(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)

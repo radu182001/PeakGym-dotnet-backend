@@ -30,7 +30,7 @@ public class ProgressLogService : IProgressLogService
 
         return result != null ?
             ServiceResponse<ProgressLogDTO>.ForSuccess(result) :
-            ServiceResponse<ProgressLogDTO>.FromError(CommonErrors.UserNotFound);
+            ServiceResponse<ProgressLogDTO>.FromError(CommonErrors.ProgressLogNotFound);
     }
 
     public async Task<ServiceResponse<PagedResponse<ProgressLogDTO>>> GetProgressLogs(PaginationQueryParams pagination, int flag, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)

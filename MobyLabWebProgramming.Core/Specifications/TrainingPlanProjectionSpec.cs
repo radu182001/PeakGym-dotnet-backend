@@ -17,7 +17,12 @@ public sealed class TrainingPlanProjectionSpec : BaseSpec<TrainingPlanProjection
         Name = e.Name,
         DaysPerWeek = e.DaysPerWeek,
         Description = e.Description,
-        TrainerId = e.Trainer.Id,
+        Trainer = new ()
+        {
+            Id = e.Trainer.Id,
+            Name = e.Trainer.Name,
+            Role = e.Trainer.Role,
+        }
     };
 
     public TrainingPlanProjectionSpec(bool orderByCreatedAt = true) : base(orderByCreatedAt)

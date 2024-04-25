@@ -13,6 +13,6 @@ public class TrainingPlanDTO
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public int DaysPerWeek { get; set; } = default!;
-    public Guid TrainerId { get; set; } = default!;
+    public UserDTO Trainer { get; set; } = default!;
 
 }

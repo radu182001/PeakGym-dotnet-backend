@@ -34,7 +34,22 @@ public class TrainingPlanService : ITrainingPlanService
 
         return result != null ?
             ServiceResponse<TrainingPlanDTO>.ForSuccess(result) :
-            ServiceResponse<TrainingPlanDTO>.FromError(CommonErrors.UserNotFound);
+            ServiceResponse<TrainingPlanDTO>.FromError(CommonErrors.TrainingPlanNotFound);
+    }
+
+    public async Task<ServiceResponse<TrainingPlanDTO>> GetCurrentTrainingPlan(Guid? id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
+    {
+
+        if (requestingUser != null && requestingUser.Role != UserRoleEnum.Client) 
+        {
+            return ServiceResponse<TrainingPlanDTO>.FromError(new(HttpStatusCode.Forbidden, "Only clients can be subscribed to training plans!", ErrorCodes.TechnicalError));
+        }
+
+        var result = id != null ? await _repository.GetAsync(new TrainingPlanProjectionSpec(id.Value), cancellationToken) : null;
+
+        return result != null ?
+            ServiceResponse<TrainingPlanDTO>.ForSuccess(result) :
+            ServiceResponse<TrainingPlanDTO>.FromError(CommonErrors.TrainingPlanNotFound);
     }
 
     public async Task<ServiceResponse<PagedResponse<TrainingPlanDTO>>> GetTrainingPlans(PaginationSearchQueryParams pagination, CancellationToken cancellationToken = default)
@@ -91,7 +106,7 @@ public class TrainingPlanService : ITrainingPlanService
 
     }
 
-    public async Task<ServiceResponse> UnsubscribeFromPlan(Guid id, UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> UnsubscribeFromPlan(UserDTO? requestingUser = default, CancellationToken cancellationToken = default)
     {
 
         if (requestingUser != null && requestingUser.Role != UserRoleEnum.Client)
@@ -153,7 +168,7 @@ public class TrainingPlanService : ITrainingPlanService
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Training plan doesn't exist!", ErrorCodes.EntityNotFound));
         }
 
-        if (result.TrainerId != requestingUser.Id)
+        if (result.Trainer.Id != requestingUser.Id)
         {
             return ServiceResponse.FromError(new(HttpStatusCode.Forbidden, "Only the owner can delete this training plan!", ErrorCodes.CannotDelete));
         }
